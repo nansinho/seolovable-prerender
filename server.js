@@ -101,10 +101,13 @@ app.get('/render', async (req, res) => {
 });
 
 // Cleanup on exit
-process.on('SIGINT', async () => {
+async function cleanup() {
     if (browser) await browser.close();
     process.exit();
-});
+}
+
+process.on('SIGINT', cleanup);
+process.on('SIGTERM', cleanup);
 
 app.listen(PORT, () => {
     console.log(`Prerender server listening on port ${PORT}`);
